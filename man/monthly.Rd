@@ -3,29 +3,14 @@
 \docType{data}
 \name{monthly}
 \alias{monthly}
-\title{Monthly data}
-\format{A data.frame with 13 variables and 1,033 observations.}
-\source{
-\url{https://drive.google.com/open?id=1FdT2STHO2Lnlweom4AwICVf-rpVMfgV4}
+\title{Monthly dataset of KMS}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 1033 rows and 13 columns.
 }
 \usage{
 monthly
 }
 \description{
-\itemize{
- \item Date: year-month-date (monthly frequency)
- \item DE: dividend payout ratio
-\item LTY: long-term yield
-\item DY: dividend yield
-\item DP: dividend-price ratio
-\item TBL: T-bill rate
-\item EP: earnings-price ratio
-\item BM: book-to-market value ratio
-\item INF: inflation rate
-\item DFY: default yield spread
-\item NTIS: net equity expansion
-\item TMS: term spread
-\item Ret: S&P 500 value-weighted log excess returns
+Monthly dataset of KMS
 }
-}
-\keyword{datasets}
+\keyword{internal}

@@ -3,29 +3,14 @@
 \docType{data}
 \name{quarterly}
 \alias{quarterly}
-\title{Quarterly data}
-\format{A data.frame with 13 variables and 345 observations.}
-\source{
-\url{https://drive.google.com/open?id=1FdT2STHO2Lnlweom4AwICVf-rpVMfgV4}
+\title{Quarterly dataset of KMS}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 345 rows and 13 columns.
 }
 \usage{
 quarterly
 }
 \description{
-\itemize{
- \item Date: year-month-date
- \item DE: dividend payout ratio
-\item LTY: long-term yield
-\item DY: dividend yield
-\item DP: dividend-price ratio
-\item TBL: T-bill rate
-\item EP: earnings-price ratio
-\item BM: book-to-market value ratio
-\item INF: inflation rate
-\item DFY: default yield spread
-\item NTIS: net equity expansion
-\item TMS: term spread
-\item Ret: S&P 500 value-weighted log excess returns
+Quarterly dataset of KMS
 }
-}
-\keyword{datasets}
+\keyword{internal}

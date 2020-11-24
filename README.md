@@ -1,14 +1,19 @@
 
-# ivx: Robust Econometric Inference
+# ivx: Robust Econometric Inference <img src='man/figures/logo.png' align="right" height="136.5" />
 
+<!-- badges: start -->
+
+[![DOI](https://zenodo.org/badge/137785074.svg)](https://zenodo.org/badge/latestdoi/137785074)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/ivx)](https://cran.r-project.org/package=ivx)
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Travis build
-status](https://travis-ci.org/kvasilopoulos/ivx.svg?branch=master)](https://travis-ci.org/kvasilopoulos/ivx)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/ivx?branch=master&svg=true)](https://ci.appveyor.com/project/kvasilopoulos/ivx)
-[![codecov](https://codecov.io/gh/kvasilopoulos/ivx/branch/master/graph/badge.svg)](https://codecov.io/gh/kvasilopoulos/ivx)
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![R build
+status](https://github.com/kvasilopoulos/ivx/workflows/R-CMD-check/badge.svg)](https://github.com/kvasilopoulos/ivx/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/kvasilopoulos/ivx/branch/master/graph/badge.svg)](https://codecov.io/gh/kvasilopoulos/ivx?branch=master)
+
+<!-- badges: end -->
 
 Drawing statistical inference on the coefficients of a short- or
 long-horizon predictive regression with persistent regressors by using
@@ -23,6 +28,10 @@ You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
+# Install release version from CRAN
+install.packages("ivx")
+
+
 # install.packages("devtools")
 devtools::install_github("kvasilopoulos/ivx")
 ```
@@ -31,13 +40,14 @@ devtools::install_github("kvasilopoulos/ivx")
 
 ``` r
 library(ivx)
+library(magrittr)
 ```
 
 This is a basic example, lets load the data first:
 
 ``` r
 # Monthly data from Kostakis et al (2014)
-monthly %>%
+kms %>%
   names()
 #>  [1] "Date" "DE"   "LTY"  "DY"   "DP"   "TBL"  "EP"   "BM"   "INF"  "DFY" 
 #> [11] "NTIS" "TMS"  "Ret"
@@ -48,29 +58,31 @@ monthly %>%
 And then do the univariate estimation:
 
 ``` r
-ivx(Ret ~ DP, data = monthly) %>% 
+ivx(Ret ~ DP, data = kms) %>% 
   summary()
 #> 
 #> Call:
-#> ivx(formula = Ret ~ DP, data = monthly, horizon = 1)
+#> ivx(formula = Ret ~ DP, data = kms, horizon = 1)
 #> 
 #> Coefficients:
 #>    Estimate Wald Ind Pr(> chi)
 #> DP 0.006489    2.031     0.154
 #> 
 #> Joint Wald statistic:  2.031 on 1 DF, p-value 0.1541
+#> Multiple R-squared:  0.002844,   Adjusted R-squared:  0.001877
 
-ivx(Ret ~ DP, data = monthly, horizon = 4) %>% 
+ivx(Ret ~ DP, data = kms, horizon = 4) %>% 
   summary()
 #> 
 #> Call:
-#> ivx(formula = Ret ~ DP, data = monthly, horizon = 4)
+#> ivx(formula = Ret ~ DP, data = kms, horizon = 4)
 #> 
 #> Coefficients:
 #>    Estimate Wald Ind Pr(> chi)
 #> DP 0.006931    2.271     0.132
 #> 
 #> Joint Wald statistic:  2.271 on 1 DF, p-value 0.1318
+#> Multiple R-squared:  0.01167,    Adjusted R-squared:  0.01358
 ```
 
 ## Multivariate
@@ -78,11 +90,11 @@ ivx(Ret ~ DP, data = monthly, horizon = 4) %>%
 And the multivariate estimation, for one or multiple horizons:
 
 ``` r
-ivx(Ret ~ DP + TBL, data = monthly) %>% 
+ivx(Ret ~ DP + TBL, data = kms) %>% 
   summary()
 #> 
 #> Call:
-#> ivx(formula = Ret ~ DP + TBL, data = monthly, horizon = 1)
+#> ivx(formula = Ret ~ DP + TBL, data = kms, horizon = 1)
 #> 
 #> Coefficients:
 #>      Estimate Wald Ind Pr(> chi)
@@ -90,12 +102,13 @@ ivx(Ret ~ DP + TBL, data = monthly) %>%
 #> TBL -0.080717    1.957     0.162
 #> 
 #> Joint Wald statistic:  3.644 on 2 DF, p-value 0.1617
+#> Multiple R-squared:  0.004968,   Adjusted R-squared:  0.003036
 
-ivx(Ret ~ DP + TBL, data = monthly, horizon = 4) %>% 
+ivx(Ret ~ DP + TBL, data = kms, horizon = 4) %>% 
   summary()
 #> 
 #> Call:
-#> ivx(formula = Ret ~ DP + TBL, data = monthly, horizon = 4)
+#> ivx(formula = Ret ~ DP + TBL, data = kms, horizon = 4)
 #> 
 #> Coefficients:
 #>      Estimate Wald Ind Pr(> chi)
@@ -103,10 +116,46 @@ ivx(Ret ~ DP + TBL, data = monthly, horizon = 4) %>%
 #> TBL -0.073549    1.595     0.207
 #> 
 #> Joint Wald statistic:  3.527 on 2 DF, p-value 0.1715
+#> Multiple R-squared:  0.018,  Adjusted R-squared:  0.01895
 ```
+
+## Yang et al. (2020) IVX-AR methodology
+
+``` r
+ivx_ar(hpi ~ cpi, data = ylpc) %>% 
+  summary()
+#> 
+#> Call:
+#> ivx_ar(formula = hpi ~ cpi, data = ylpc, horizon = 1)
+#> 
+#> Auto () with AR terms q = 4
+#> 
+#> Coefficients:
+#>       Estimate Wald Ind Pr(> chi)  
+#> cpi -0.0001775    4.326    0.0375 *
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> Joint Wald statistic:  4.326 on 1 DF, p-value 0.03753
+#> Multiple R-squared:  0.02721,    Adjusted R-squared:  0.02142
+#> Wald AR statistic: 132.3 on 4 DF, p-value < 2.2e-16
+```
+
+<!--
+#### To-do  
+
+* The Bonferroni method 
+  - Cavanagh et al (1995)   
+  - Campbell and Yogo (2006)    
+* A conditional likelihood approach 
+  - Jansson and Moreira (2006)  
+* A control function approach   
+  - Elliot (2001)
+-->
 
 -----
 
 Please note that the ‘ivx’ project is released with a [Contributor Code
-of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
-project, you agree to abide by its terms.
+of
+Conduct](https://github.com/kvasilopoulos/ivx/blob/master/.github/CODE_OF_CONDUCT.md).
+By contributing to this project, you agree to abide by its terms.
