@@ -1,7 +1,7 @@
 Type: Package
 Package: ivx
 Title: Robust Econometric Inference
-Version: 1.1.0
+Version: 1.1.1
 Authors@R: 
     c(person(given = "Kostas",
              family = "Vasilopoulos",
@@ -28,11 +28,11 @@ LinkingTo: Rcpp (>= 1.0.1), RcppArmadillo (>= 0.9.300.2.0)
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.1
 NeedsCompilation: yes
-Packaged: 2020-11-24 12:52:58 UTC; T460p
+Packaged: 2025-09-20 10:22:53 UTC; User
 Author: Kostas Vasilopoulos [cre, aut],
   Efthymios Pavlidis [aut]
 Maintainer: Kostas Vasilopoulos <k.vasilopoulo@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-11-24 13:50:02 UTC
+Date/Publication: 2025-09-20 10:40:02 UTC

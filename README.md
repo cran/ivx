@@ -7,20 +7,18 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/ivx)](https://cran.r-project.org/package=ivx)
 [![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![R build
-status](https://github.com/kvasilopoulos/ivx/workflows/R-CMD-check/badge.svg)](https://github.com/kvasilopoulos/ivx/actions)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![R-CMD-check](https://github.com/kvasilopoulos/ivx/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/kvasilopoulos/ivx/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/kvasilopoulos/ivx/branch/master/graph/badge.svg)](https://codecov.io/gh/kvasilopoulos/ivx?branch=master)
+coverage](https://codecov.io/gh/kvasilopoulos/ivx/graph/badge.svg)](https://app.codecov.io/gh/kvasilopoulos/ivx)
 
 <!-- badges: end -->
 
 Drawing statistical inference on the coefficients of a short- or
 long-horizon predictive regression with persistent regressors by using
 the IVX method of [Magdalinos and Phillips
-(2009)](https://doi.org/10.1017/S0266466608090154) and [Kostakis,
-Magdalinos and Stamatogiannis
-(2015)](https://doi.org/10.1093/rfs/hhu139).
+(2009)](doi:10.1017/S0266466608090154) and [Kostakis, Magdalinos and
+Stamatogiannis (2015)](doi:10.1093/rfs/hhu139).
 
 ## Installation
 
@@ -41,6 +39,7 @@ devtools::install_github("kvasilopoulos/ivx")
 ``` r
 library(ivx)
 library(magrittr)
+#> Warning: package 'magrittr' was built under R version 4.3.3
 ```
 
 This is a basic example, lets load the data first:
@@ -143,8 +142,7 @@ ivx_ar(hpi ~ cpi, data = ylpc) %>%
 
 <!--
 #### To-do  
-
-* The Bonferroni method 
+&#10;* The Bonferroni method 
   - Cavanagh et al (1995)   
   - Campbell and Yogo (2006)    
 * A conditional likelihood approach 
@@ -153,7 +151,7 @@ ivx_ar(hpi ~ cpi, data = ylpc) %>%
   - Elliot (2001)
 -->
 
------
+------------------------------------------------------------------------
 
 Please note that the ‘ivx’ project is released with a [Contributor Code
 of

@@ -1,12 +1,11 @@
 
 # AR Wald Test -------------------------------------------------------------
 
-# TODO do ac_test and you are done
-
 #' Tests  for autocorrelation
 #'
 #' @description
 #'
+#' * `ac_test`: For all tests
 #' * `ac_test_wald`: Wald test
 #' * `ac_test_lb`: Ljung-Box
 #' * `ac_test_bp`:  Box-Pierce
@@ -16,7 +15,7 @@
 #' @param lag the number of lags.
 #'
 #'
-#' @details #' If p-value < 0.051: You can reject the null hypothesis assuming a
+#' @details If p-value < 0.051: You can reject the null hypothesis assuming a
 #' 5% chance of making a mistake. So you can assume that your values are showing
 #' dependence on each other.
 #'
@@ -30,6 +29,7 @@
 #' mdl <- ivx(hpi ~ cpi + inv, data = ylpc)
 #' ac_test_wald(mdl)
 #'
+#' ac_test(mdl)
 #'
 #' @name ac_test_
 #' @export
@@ -75,7 +75,7 @@ ac_test_wald.default <- function(x, lag = 1) {
 
 #' @export
 ac_test_wald.ivx <- function(x, lag = 1) {
-  res <- x$residuals_ols
+  res <- x$ols$residuals
   ac_test_wald.default(res, lag = lag)
 }
 
@@ -120,7 +120,7 @@ ac_test_lb.default <- function(x, lag = 1) {
 
 #' @export
 ac_test_lb.ivx <- function(x, lag = 1) {
-  res <- x$residuals_ols
+  res <- x$ols$residuals
   ac_test_lb.default(res, lag)
 }
 
@@ -149,7 +149,7 @@ ac_test_bp.default <- function(x, lag = 1) {
 
 #' @export
 ac_test_bp.ivx <- function(x, lag = 1) {
-  res <- x$residuals_ols
+  res <- x$ols$residuals
   ac_test_bp.default(res, lag)
 }
 
@@ -178,7 +178,7 @@ ac_test_bg.ivx <- function(x, order = 1, type = c("Chisq", "F"), fill = 0) {
   k <- ncol(X)
   m <- length(order)
 
-  res_ <- c(x$residuals_ols, rep(0, x$horizon))
+  res_ <- c(x$ols$residuals, rep(0, x$horizon))
 
   Z <- sapply(order, function(x) c(rep(fill, length.out = x), res_[1:(n - x)]))
   auxfit <- lm(res_ ~.,  cbind(res_, X, Z))
@@ -198,10 +198,10 @@ ac_test_bg.ivx <- function(x, order = 1, type = c("Chisq", "F"), fill = 0) {
       names(df) <- c("df1", "df2")
       p.val <- 1 - pf(bg, df1 = df[1], df2 = df[2])
     })
-  bg
+  structure(bg, pvalue = p.val)
 }
 
-# TODO this test
+#' @export
 ac_test_bg.default <- function(x, order, type, fill) {
   stop("not available method.", call. = FALSE)
 }
@@ -228,14 +228,22 @@ ac_test <- function(x, lag_max = 5) {
 
 #' @export
 ac_test.ivx <- function(x, lag_max = 5) {
-  res <- x$residuals_ols
-  ac_test.default(res, lag_max)
+  res <- x$ols$residuals
+  stats <- ac_test.default(res, lag_max)
+  bg <- pval <-  vector("numeric", lag_max)
+  for(i in 1:lag_max) {
+    temp <- ac_test_bg.ivx(x, order = i)
+    pval[i] <- attr(temp, "pvalue")
+    bg[i] <- temp
+  }
+  stats$BreuschGodfrey <- bg
+  attr(stats, "pvalue")$BreuschGodfrey  <- pval
+  stats
 }
 
 #' @export
 ac_test.default <- function(x, lag_max = 5) {
-  lb <- vector("numeric", lag_max)
-  bp <- vector("numeric", lag_max)
+  bp <- lb <- vector("numeric", lag_max)
   for(i in 1:lag_max) {
     lb[i] <- Box.test(x, lag = i, type = "Ljung-Box")$statistic
     bp[i] <- Box.test(x, lag = i, type = "Box-Pierce")$statistic
@@ -271,7 +279,7 @@ stars_pval <- function (pval) {
 print.ac_test <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   pval <- attr(x, "pvalue")
   lst <- list()
-  for(i in 2:4) {
+  for(i in 2:5) {
     stars <- stars_pval(pval[,i])
     lst[[i]] <- paste0(formatC(x[,i], digits = digits), stars)
   }
@@ -279,7 +287,8 @@ print.ac_test <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
     Lag = 1:nrow(x),
     Wald = lst[[2]],
     LjungBox = lst[[3]],
-    BoxPierce = lst[[4]]
+    BoxPierce = lst[[4]],
+    BreuschGodfrey = lst[[5]]
   )
   print(out, row.names = FALSE)
 }
